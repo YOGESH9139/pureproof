@@ -125,7 +125,7 @@ const KYCDemo: React.FC = () => {
             onClick={() => handleAction('modify')} 
             disabled={!activeAddress || loading}
           >
-            Upgrade to FULL (Pay 0.01 USDC)
+            Modify KYC (Pay 0.01 USDC)
           </button>
         </div>
 
