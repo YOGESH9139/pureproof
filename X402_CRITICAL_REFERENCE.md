@@ -7,13 +7,13 @@
 ```
 project-root/
 │
-├── x402-demo-server/              ← BACKEND
+├── pureproof-server/              ← BACKEND
 │   ├── index.ts                   ⭐ All x402 server code here
 │   ├── .env                       ⭐ AVM_ADDRESS, FACILITATOR_URL
 │   ├── package.json               Dependencies: @x402/hono, @x402/core
 │   └── README.md                  Full backend documentation
 │
-├── X402-Usecase/projects/X402-Usecase/  ← FRONTEND
+├── pureproof-usecase/projects/pureproof-usecase/  ← FRONTEND
 │   ├── src/
 │   │   ├── App.tsx                Wallet provider setup
 │   │   ├── Home.tsx               Landing page
@@ -43,7 +43,7 @@ project-root/
 
 ### Backend (Hono Server)
 
-**File:** `x402-demo-server/index.ts`
+**File:** `pureproof-server/index.ts`
 
 | Section | Line Range | Purpose | Priority |
 |---------|-----------|---------|----------|
@@ -98,7 +98,7 @@ project-root/
 
 ### Use Case 1: "How does CORS work?"
 
-**File:** `x402-demo-server/index.ts` (lines 33-56)
+**File:** `pureproof-server/index.ts` (lines 33-56)
 
 ```typescript
 // ⚠️ CRITICAL: CORS must be FIRST middleware
@@ -131,7 +131,7 @@ app.use('*', async (c, next) => {
 
 ### Use Case 2: "How does x402 middleware protect routes?"
 
-**File:** `x402-demo-server/index.ts` (lines 68-87)
+**File:** `pureproof-server/index.ts` (lines 68-87)
 
 ```typescript
 // Define payment requirements
@@ -268,7 +268,7 @@ export async function fetchWeatherWithPayment(
 
 **Step 1: Backend - Update config**
 
-**File:** `x402-demo-server/index.ts` (lines 68-85)
+**File:** `pureproof-server/index.ts` (lines 68-85)
 
 ```typescript
 const weatherConfig = {
@@ -288,7 +288,7 @@ const weatherConfig = {
 
 **Step 2: Backend - Add handler**
 
-**File:** `x402-demo-server/index.ts` (after line 97)
+**File:** `pureproof-server/index.ts` (after line 97)
 
 ```typescript
 app.get('/forecast', (c) => {
@@ -536,11 +536,11 @@ Causes:
 
 ```bash
 # Start frontend (localhost:5173)
-cd X402-Usecase/projects/X402-Usecase
+cd pureproof-usecase/projects/pureproof-usecase
 npm run dev
 
 # Start backend (localhost:4021)
-cd x402-demo-server
+cd pureproof-server
 npx tsx index.ts
 
 # Build frontend
@@ -566,8 +566,8 @@ npm install
 ## Support Resources
 
 - 📚 [X402_IMPLEMENTATION_GUIDE.md](./X402_IMPLEMENTATION_GUIDE.md) - Complete flow explanation
-- 📖 [x402-demo-server/README.md](./x402-demo-server/README.md) - Backend full docs
-- 📖 [X402-Usecase/README_X402.md](./X402-Usecase/projects/X402-Usecase/README_X402.md) - Frontend full docs
+- 📖 [pureproof-server/README.md](./pureproof-server/README.md) - Backend full docs
+- 📖 [pureproof-usecase/README_X402.md](./pureproof-usecase/projects/pureproof-usecase/README_X402.md) - Frontend full docs
 - 🌐 [x402.money](https://x402.money) - Official specification
 - 🔗 [Algorand Developer](https://developer.algorand.org)
 - 💼 [GoPlausible](https://goplausible.xyz) - Facilitator service

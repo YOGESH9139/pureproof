@@ -877,8 +877,8 @@ Potential Improvements:
 
 - [X402_CRITICAL_REFERENCE.md](./X402_CRITICAL_REFERENCE.md) - Quick reference
 - [X402_IMPLEMENTATION_GUIDE.md](./X402_IMPLEMENTATION_GUIDE.md) - Complete guide
-- [x402-demo-server/README.md](./x402-demo-server/README.md) - Backend docs
-- [X402-Usecase/README_X402.md](./X402-Usecase/projects/X402-Usecase/README_X402.md) - Frontend docs
+- [pureproof-server/README.md](./pureproof-server/README.md) - Backend docs
+- [pureproof-usecase/README_X402.md](./pureproof-usecase/projects/pureproof-usecase/README_X402.md) - Frontend docs
 
 ---
 

@@ -23,7 +23,7 @@ Your x402 demo has been transformed into a **complete, competition-ready starter
 
 ## 📁 What Was Created
 
-### Backend Enhancements (x402-demo-server/)
+### Backend Enhancements (pureproof-server/)
 
 **New Files:**
 ```
@@ -110,7 +110,7 @@ Quick Learners (15 min)
 └─ HACKATHON_STARTER_KIT.md
 
 Building Your MVP (40 min)
-├─ x402-demo-server/HACKATHON_README.md
+├─ pureproof-server/HACKATHON_README.md
 ├─ handlers/ (copy examples)
 └─ endpoints.config.ts
 
@@ -136,7 +136,7 @@ ROOT LEVEL (Start Here)
 ├─ FILE_TREE.md                     ← Navigation guide
 └─ (Other docs below)
 
-x402-demo-server/ (Main Build Area)
+pureproof-server/ (Main Build Area)
 ├─ 📝 endpoints.config.ts           ← EDIT: Define routes
 ├─ 📦 handlers/                     ← EDIT: Add logic
 │  └─ (4 examples provided)
@@ -145,7 +145,7 @@ x402-demo-server/ (Main Build Area)
 └─ 📚 HACKATHON_README.md           ← Backend details
 
 Frontend (Pre-configured)
-└─ X402-Usecase/projects/X402-Usecase/
+└─ pureproof-usecase/projects/pureproof-usecase/
    └─ (Already setup - just works)
 
 Documentation (Reference)
@@ -338,7 +338,7 @@ A **monetized API endpoint** where:
 - Troubleshooting
 - Resources
 
-### x402-demo-server/HACKATHON_README.md (400+ lines)
+### pureproof-server/HACKATHON_README.md (400+ lines)
 - Backend setup
 - File structure
 - Common patterns

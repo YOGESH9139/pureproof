@@ -5,7 +5,7 @@
 ## 🎯 Team's MVP Workspace
 
 ```
-x402-demo-server/  ← MAIN FOCUS FOR TEAMS
+pureproof-server/  ← MAIN FOCUS FOR TEAMS
 │
 ├─ 📖 HACKATHON_README.md             ← Backend quick start
 ├─ 📝 endpoints.config.ts             ← EDIT: Define your routes
@@ -188,7 +188,7 @@ Connect wallet → Request data → Approve → See result ✓
 ## 📋 Folder Structure Explained
 
 ```
-x402-demo-server/                Backend Server
+pureproof-server/                Backend Server
 ├─ handlers/                      Where business logic lives
 │  └─ Each file = one endpoint
 │
@@ -198,8 +198,8 @@ x402-demo-server/                Backend Server
 ├─ package.json                  Dependencies
 └─ node_modules/                 Generated (ignore)
 
-X402-Usecase/projects/           Frontend App
-└─ X402-Usecase/
+pureproof-usecase/projects/           Frontend App
+└─ pureproof-usecase/
    ├─ src/                       React source
    │  ├─ components/             UI components
    │  │  └─ Weather.tsx          Example payment component
@@ -269,7 +269,7 @@ See system design                     ARCHITECTURE.md
 Debug problems                        X402_CRITICAL_REFERENCE.md
 Deploy to production                  ARCHITECTURE.md
 Understand this folder                This file (FILE_TREE.md)
-Learn backend details                 x402-demo-server/HACKATHON_README.md
+Learn backend details                 pureproof-server/HACKATHON_README.md
 Organize the event                    FACILITATOR_CHECKLIST.md
 ```
 

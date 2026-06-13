@@ -6,8 +6,8 @@
 
 - [ ] Clone starter kit repo
 - [ ] Verify all files are present
-  - [ ] Backend: `x402-demo-server/`
-  - [ ] Frontend: `X402-Usecase/projects/X402-Usecase/`
+  - [ ] Backend: `pureproof-server/`
+  - [ ] Frontend: `pureproof-usecase/projects/pureproof-usecase/`
   - [ ] Docs: All `.md` files present
 - [ ] Run `npm install` in both directories (optional, teams can do it)
 - [ ] Test backend: `npm start` → check `http://localhost:4021/health`
@@ -174,7 +174,7 @@ Check:
 Point teams to:
 - [ ] **README_HACKATHON.md** - Overview
 - [ ] **HACKATHON_STARTER_KIT.md** - Detailed guide
-- [ ] **x402-demo-server/HACKATHON_README.md** - Backend specific
+- [ ] **pureproof-server/HACKATHON_README.md** - Backend specific
 - [ ] **handlers/** - Copy/modify examples
 - [ ] **endpoints.config.ts** - Define your routes
 - [ ] **X402_CRITICAL_REFERENCE.md** - Code lookup

@@ -1,3 +1,3 @@
-[submodule "402-demo-client"]
-	path = 402-demo-client
+[submodule "pureproof-client"]
+	path = pureproof-client
 	url = https://github.com/marotipatre/X402-Demo.git

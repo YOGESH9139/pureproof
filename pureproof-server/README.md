@@ -25,7 +25,7 @@ This is a Hono-based resource server that implements the **x402 protocol** for H
 ### Installation
 
 ```bash
-cd x402-demo-server
+cd pureproof-server
 npm install
 ```
 
@@ -129,7 +129,7 @@ curl http://localhost:4021/health
 
 ### 1. CORS Configuration (Lines 33-56)
 
-**File:** `x402-demo-server/index.ts`
+**File:** `pureproof-server/index.ts`
 
 ```typescript
 // ⚠️ CRITICAL: CORS MUST be first middleware
@@ -171,7 +171,7 @@ app.use('*', async (c, next) => {
 
 ### 2. x402 Server Initialization (Lines 23-30)
 
-**File:** `x402-demo-server/index.ts`
+**File:** `pureproof-server/index.ts`
 
 ```typescript
 // ⚠️ CRITICAL: Initialize x402 server and register schemes
@@ -199,7 +199,7 @@ x402Server.register(ALGORAND_TESTNET_CAIP2, avmServerScheme);
 
 ### 3. Payment Middleware Configuration (Lines 68-85)
 
-**File:** `x402-demo-server/index.ts`
+**File:** `pureproof-server/index.ts`
 
 ```typescript
 // ⚠️ CRITICAL: Define which routes require payment
@@ -244,7 +244,7 @@ app.use(paymentMiddleware(weatherConfig, x402Server));
 
 ### 4. Resource Handler (Lines 88-97)
 
-**File:** `x402-demo-server/index.ts`
+**File:** `pureproof-server/index.ts`
 
 ```typescript
 // ✅ This handler ONLY executes after payment verified

@@ -60,17 +60,17 @@
 
 ```bash
 # Backend
-cd x402-demo-server
+cd pureproof-server
 npm install
 
 # Frontend (in separate terminal)
-cd X402-Usecase/projects/X402-Usecase
+cd pureproof-usecase/projects/X402-Usecase
 npm install
 ```
 
 **2. Configure environment**
 
-**Backend** - Create `.env` in `x402-demo-server/`:
+**Backend** - Create `.env` in `pureproof-server/`:
 
 ```env
 AVM_ADDRESS=YOUR_WALLET_ADDRESS_HERE
@@ -80,7 +80,7 @@ PORT=4021
 
 Get your wallet address from your Pera/Defly wallet (copy it)
 
-**Frontend** - Create `.env.local` in `X402-Usecase/projects/X402-Usecase/`:
+**Frontend** - Create `.env.local` in `pureproof-usecase/projects/X402-Usecase/`:
 
 ```env
 VITE_ALGOD_SERVER=https://testnet-api.algonode.cloud
@@ -92,10 +92,10 @@ VITE_FACILITATOR_URL=https://facilitator.goplausible.xyz
 **3. Start servers**
 
 ```bash
-# Terminal 1 - Backend (from x402-demo-server/)
+# Terminal 1 - Backend (from pureproof-server/)
 npm start
 
-# Terminal 2 - Frontend (from X402-Usecase/projects/X402-Usecase/)
+# Terminal 2 - Frontend (from pureproof-usecase/projects/X402-Usecase/)
 npm run dev
 ```
 
@@ -114,7 +114,7 @@ http://localhost:5173
 ## Project Structure
 
 ```
-x402-demo-server/
+pureproof-server/
 │
 ├── index.ts                 ⭐ Main server (DO NOT EDIT)
 ├── endpoints.config.ts      📝 Define your payment routes here

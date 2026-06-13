@@ -109,14 +109,14 @@ They only see: problem solved → cost displayed → payment made.
 
 ```bash
 # Backend setup
-cd x402-demo-server
+cd pureproof-server
 npm install
 echo "AVM_ADDRESS=YOUR_WALLET" > .env
 echo "FACILITATOR_URL=https://facilitator.goplausible.xyz" >> .env
 npm start
 
 # Frontend setup (in new terminal)
-cd X402-Usecase/projects/X402-Usecase
+cd pureproof-usecase/projects/pureproof-usecase
 npm install
 npm run dev
 ```
@@ -130,13 +130,13 @@ npm run dev
 ## 🏗️ Repository Structure
 
 ```
-X402-Usecase/
+pureproof-usecase/
 ├── 🎯 HACKATHON_STARTER_KIT.md      ← START HERE!
 ├── ⚙️ ARCHITECTURE.md                ← System design
 ├── 📚 X402_IMPLEMENTATION_GUIDE.md  ← Protocol deep dive
 ├── 🔗 X402_CRITICAL_REFERENCE.md    ← Code lookup
 │
-├── 🔧 x402-demo-server/             ← BACKEND (YOUR MVP HERE!)
+├── 🔧 pureproof-server/             ← BACKEND (YOUR MVP HERE!)
 │   ├── 📝 HACKATHON_README.md       ← Backend-specific guide
 │   ├── index.ts                     ← Main server
 │   ├── endpoints.config.ts          ← EDIT: Define your routes
@@ -148,10 +148,10 @@ X402-Usecase/
 │   ├── .env                         ← FILL: Your wallet address
 │   └── package.json
 │
-├── 402-demo-client/                 ← CLI client (ignore)
+├── pureproof-client/                 ← CLI client (ignore)
 │   └── index.ts
 │
-└── X402-Usecase/projects/X402-Usecase/  ← FRONTEND
+└── pureproof-usecase/projects/pureproof-usecase/  ← FRONTEND
     ├── src/
     │   ├── App.tsx
     │   ├── Home.tsx
@@ -185,7 +185,7 @@ X402-Usecase/
 **Start here:**
 1. Read [HACKATHON_STARTER_KIT.md](./HACKATHON_STARTER_KIT.md) (10 min)
 2. Run setup above (5 min)
-3. Check [x402-demo-server/HACKATHON_README.md](./x402-demo-server/HACKATHON_README.md) (5 min)
+3. Check [pureproof-server/HACKATHON_README.md](./pureproof-server/HACKATHON_README.md) (5 min)
 4. Pick a problem & build!
 
 ### **For Judges**
@@ -244,7 +244,7 @@ Choose Your Path:
 🚀 Quick Start (20 min total)
 ├─ THIS FILE ← Overview & timeline
 ├─ HACKATHON_STARTER_KIT.md ← 10+ use case ideas
-└─ x402-demo-server/HACKATHON_README.md ← Backend details
+└─ pureproof-server/HACKATHON_README.md ← Backend details
 
 📖 Deep Dive (1 hour)
 ├─ X402_IMPLEMENTATION_GUIDE.md ← Protocol internals
@@ -295,13 +295,13 @@ Choose Your Path:
 
 ```bash
 # Backend
-cd x402-demo-server
+cd pureproof-server
 npm install                 # Install once
 npm start                   # Run server
 npm run dev                 # Auto-reload on changes
 
 # Frontend
-cd X402-Usecase/projects/X402-Usecase
+cd pureproof-usecase/projects/pureproof-usecase
 npm install                 # Install once
 npm run dev                 # Dev server + HMR
 npm run build              # Production build
@@ -543,7 +543,7 @@ npx tsc --noEmit  # See all TypeScript errors
 |------|---------|-------|
 | **THIS FILE** | 4-hour sprint overview | 📖 Read |
 | **HACKATHON_STARTER_KIT.md** | 10+ use case ideas | 📖 Read |
-| **x402-demo-server/HACKATHON_README.md** | Backend specifics | 📖 Read |
+| **pureproof-server/HACKATHON_README.md** | Backend specifics | 📖 Read |
 | **endpoints.config.ts** | Define your routes | ✏️ **EDIT** |
 | **handlers/*.ts** | Your business logic | ✏️ **EDIT** |
 | **index.ts** | Register routes | ⚠️ Careful |
@@ -595,7 +595,7 @@ You have **2 tokens per team**. Use them strategically:
 
 **Quick links:**
 - 🚀 [HACKATHON_STARTER_KIT.md](./HACKATHON_STARTER_KIT.md) - Use cases & ideas
-- ⚙️ [x402-demo-server/HACKATHON_README.md](./x402-demo-server/HACKATHON_README.md) - Backend setup
+- ⚙️ [pureproof-server/HACKATHON_README.md](./pureproof-server/HACKATHON_README.md) - Backend setup
 - 🔗 [X402_CRITICAL_REFERENCE.md](./X402_CRITICAL_REFERENCE.md) - Code reference
 - 📖 [X402_IMPLEMENTATION_GUIDE.md](./X402_IMPLEMENTATION_GUIDE.md) - Protocol deep dive
 - 🏗️ [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture

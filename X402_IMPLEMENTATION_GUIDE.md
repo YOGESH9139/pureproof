@@ -114,7 +114,7 @@ Accept: */*
 
 **Backend Code:**
 ```typescript
-// x402-demo-server/index.ts
+// pureproof-server/index.ts
 app.use(paymentMiddleware(weatherConfig, x402Server))
 ```
 
@@ -254,7 +254,7 @@ Accept: */*
 
 **Backend Code:**
 ```typescript
-// x402-demo-server/index.ts
+// pureproof-server/index.ts
 app.use(paymentMiddleware(weatherConfig, x402Server));
 ```
 
@@ -337,7 +337,7 @@ Content-Type: application/json
 
 ### 1. CORS Configuration (CRITICAL - MUST BE FIRST)
 
-**Location:** `x402-demo-server/index.ts` (lines 33-56)
+**Location:** `pureproof-server/index.ts` (lines 33-56)
 
 ```typescript
 // ⚠️ MUST be FIRST middleware - before everything else
@@ -381,7 +381,7 @@ app.use(cors({ ... }))  // Built-in CORS too restrictive
 
 ### 2. X402 Server Initialization
 
-**Location:** `x402-demo-server/index.ts` (lines 23-30)
+**Location:** `pureproof-server/index.ts` (lines 23-30)
 
 ```typescript
 // Initialize facilitator connection
@@ -407,7 +407,7 @@ x402Server.register(ALGORAND_TESTNET_CAIP2, avmServerScheme)
 
 ### 3. Payment Middleware Configuration
 
-**Location:** `x402-demo-server/index.ts` (lines 68-85)
+**Location:** `pureproof-server/index.ts` (lines 68-85)
 
 ```typescript
 const weatherConfig = {

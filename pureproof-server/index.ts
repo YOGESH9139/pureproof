@@ -1,10 +1,10 @@
 /**
- * X402 Hackathon Starter Kit - Main Server
+ * PureProof - Main Server
  *
- * This server demonstrates how to build payment-protected API endpoints
- * using the x402 protocol on Algorand TestNet.
+ * x402-powered KYC verification system for DeFi platforms.
+ * Payment-protected API endpoints using the x402 protocol on Algorand TestNet.
  *
- * TEAM QUICK START:
+ * QUICK START:
  * 1. Import handlers from ./handlers/ directory
  * 2. Enable endpoints in endpoints.config.ts
  * 3. Register routes below
@@ -59,7 +59,7 @@ if (!avmAddress || !facilitatorUrl) {
 }
 
 console.log('\n' + '═'.repeat(60));
-console.log('x402 HACKATHON STARTER KIT');
+console.log('PUREPROOF - x402 DeFi KYC SERVER');
 console.log('═'.repeat(60));
 console.log('Configuration:');
 console.log(`  Receiver Address: ${avmAddress}`);
@@ -181,7 +181,7 @@ app.get('/weather', handleWeatherRequest);
 app.get('/health', (c) => {
   return c.json({
     status: 'ok',
-    service: 'x402-hackathon-starter',
+    service: 'pureproof-server',
     uptime: process.uptime(),
   });
 });
@@ -192,7 +192,7 @@ app.get('/health', (c) => {
  */
 app.get('/info', (c) => {
   return c.json({
-    service: 'x402-hackathon-starter',
+    service: 'pureproof-server',
     version: '1.0.0',
     network: 'Algorand TestNet',
     receiver: avmAddress,
@@ -226,7 +226,7 @@ app.notFound((c) => {
 // ════════════════════════════════════════════════════════════════════
 
 serve({ fetch: app.fetch, port }, () => {
-  console.log('\n✅ x402 Resource Server is running!\n');
+  console.log('\n✅ PureProof Server is running!\n');
   console.log('═'.repeat(60));
   console.log('Endpoints:');
   console.log(`  API:     http://localhost:${port}`);

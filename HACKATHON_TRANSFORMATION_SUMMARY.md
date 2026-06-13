@@ -12,7 +12,7 @@ Your x402 demo project has been **transformed into a production-ready hackathon 
 
 ## 📊 Changes Made
 
-### 1. Backend Architecture (x402-demo-server/)
+### 1. Backend Architecture (pureproof-server/)
 
 #### Created Modular System
 ```
@@ -63,7 +63,7 @@ index.ts
 - **Length:** 600+ lines
 - **Includes:** 10+ example ideas with implementation details
 
-#### Created x402-demo-server/HACKATHON_README.md
+#### Created pureproof-server/HACKATHON_README.md
 - **Purpose:** Backend-specific guide
 - **Content:** Setup, structure, common patterns, testing
 - **Audience:** Backend developers
@@ -186,7 +186,7 @@ For Facilitators:
 └─ README_HACKATHON.md
 
 For Backend Devs:
-├─ x402-demo-server/HACKATHON_README.md
+├─ pureproof-server/HACKATHON_README.md
 └─ handlers/*.ts (examples)
 ```
 
@@ -357,7 +357,7 @@ Look for:
 6. ✅ handlers/analytics.ts
 7. ✅ handlers/ai-analysis.ts
 8. ✅ handlers/creator-content.ts
-9. ✅ x402-demo-server/HACKATHON_README.md
+9. ✅ pureproof-server/HACKATHON_README.md
 
 ### Files Modified (2):
 1. ✅ index.ts (backend) - Modernized with imports & comments
