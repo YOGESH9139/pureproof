@@ -1,0 +1,2034 @@
+#pragma version 11
+#pragma typetrack false
+
+// NexusVerifierLogicSig.verify() -> uint64:
+main:
+    intcblock 32 0 1 2 768
+    bytecblock 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001 0x01 0x 0x2d965651cdd9e4811f4e51b80ddca8a8b4a93ee17420aae6adaa01c2617c6e85 0x4000 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593efffffff
+    intc_1 // 0
+    dupn 11
+    bytec_2 // ""
+    dupn 3
+    // NexusVerifierLogicSig.py:42-43
+    // # prevent the verifier account from being rekeyed by this transaction
+    // assert py.Txn.rekey_to == py.Global.zero_address
+    txn RekeyTo
+    global ZeroAddress
+    ==
+    assert
+    // NexusVerifierLogicSig.py:45-49
+    // # read proof and public inputs
+    // # they are passed in to an arc4 contract as DyanmicArray[Bytes32]
+    // # where Bytes32 is a 32 bytes StaticArray; so we skip the first 2 bytes which encode
+    // # the length of the array (we also skip the first app arg which is the method name)
+    // proof = py.Txn.application_args(1)[2:]
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 2
+    dig 1
+    >=
+    intc_3 // 2
+    dig 2
+    uncover 2
+    select
+    swap
+    substring3
+    // NexusVerifierLogicSig.py:50
+    // public_inputs = py.Txn.application_args(2)[2:]
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_3 // 2
+    dig 1
+    >=
+    intc_3 // 2
+    dig 2
+    uncover 2
+    select
+    swap
+    substring3
+    dup
+    cover 2
+    // NexusVerifierLogicSig.py:52-53
+    // # check proof and public inputs lengths
+    // assert proof.length == 24 * 32
+    dig 1
+    len
+    dup
+    intc 4 // 768
+    ==
+    assert
+    // NexusVerifierLogicSig.py:54
+    // assert public_inputs.length == 5 * 32
+    swap
+    len
+    dup
+    cover 3
+    pushint 160
+    ==
+    assert
+    // NexusVerifierLogicSig.py:75-77
+    // # Read proof #
+    // # wires commitments
+    // L_COM = proof[0:64]
+    intc_1 // 0
+    dig 1
+    >=
+    intc_1 // 0
+    dig 2
+    uncover 2
+    select
+    pushint 64
+    dig 2
+    >=
+    pushint 64
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:78
+    // R_COM = proof[64:128]
+    pushint 128
+    dig 2
+    >=
+    pushint 128
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:79
+    // O_COM = proof[128:192]
+    pushint 192
+    dig 2
+    >=
+    pushint 192
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:81-82
+    // # h = h_0 + x^{n+2}h_1 + x^{2(n+2)}h_2
+    // H_0 = proof[192:256]
+    pushint 256
+    dig 2
+    >=
+    pushint 256
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:83
+    // H_1 = proof[256:320]
+    pushint 320
+    dig 2
+    >=
+    pushint 320
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:84
+    // H_2 = proof[320:384]
+    pushint 384
+    dig 2
+    >=
+    pushint 384
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 3
+    // NexusVerifierLogicSig.py:86-87
+    // # wire values at zeta
+    // L_AT_Z = proof[384:416]
+    pushint 416
+    dig 2
+    >=
+    pushint 416
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    dup
+    cover 4
+    cover 4
+    // NexusVerifierLogicSig.py:88
+    // R_AT_Z = proof[416:448]
+    pushint 448
+    dig 2
+    >=
+    pushint 448
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:89
+    // O_AT_Z = proof[448:480]
+    pushint 480
+    dig 2
+    >=
+    pushint 480
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:91
+    // S1_AT_Z = proof[480:512]					# s1(zeta)
+    pushint 512
+    dig 2
+    >=
+    pushint 512
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:92
+    // S2_AT_Z = proof[512:544] 					# s2(zeta)
+    pushint 544
+    dig 2
+    >=
+    pushint 544
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:93
+    // GRAND_PRODUCT = proof[544:608]				# z(x)
+    pushint 608
+    dig 2
+    >=
+    pushint 608
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:94
+    // GRAND_PRODUCT_AT_Z_OMEGA = proof[608:640]   # z(w*zeta)
+    pushint 640
+    dig 2
+    >=
+    pushint 640
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:96-97
+    // # Folded proof for opening of linear poly, l, r, o, s1, s2
+    // BATCH_OPENING_AT_Z = proof[640:704]
+    pushint 704
+    dig 2
+    >=
+    pushint 704
+    dig 3
+    uncover 2
+    select
+    dig 3
+    uncover 2
+    dig 2
+    substring3
+    cover 4
+    // NexusVerifierLogicSig.py:99-100
+    // # opening at zeta * omega
+    // OPENING_AT_Z_OMEGA = proof[704:768]
+    intc 4 // 768
+    dig 2
+    >=
+    intc 4 // 768
+    uncover 3
+    uncover 2
+    select
+    substring3
+    swap
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:103-104
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bnz main_if_body@6
+    // NexusVerifierLogicSig.py:105
+    // or BigUInt.from_bytes(R_AT_Z) >= q
+    dig 7
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:105
+    // or BigUInt.from_bytes(R_AT_Z) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bnz main_if_body@6
+    // NexusVerifierLogicSig.py:106
+    // or BigUInt.from_bytes(O_AT_Z) >= q
+    dig 6
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:106
+    // or BigUInt.from_bytes(O_AT_Z) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bnz main_if_body@6
+    // NexusVerifierLogicSig.py:107
+    // or BigUInt.from_bytes(S1_AT_Z) >= q
+    dig 5
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:107
+    // or BigUInt.from_bytes(S1_AT_Z) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bnz main_if_body@6
+    // NexusVerifierLogicSig.py:108
+    // or BigUInt.from_bytes(S2_AT_Z) >= q
+    dig 4
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:108
+    // or BigUInt.from_bytes(S2_AT_Z) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bnz main_if_body@6
+    // NexusVerifierLogicSig.py:109
+    // or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    dig 2
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:109
+    // or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    b>=
+    // NexusVerifierLogicSig.py:103-109
+    // ### check proof public inputs are well-formed ###
+    // if (BigUInt.from_bytes(L_AT_Z) >= q
+    // 		or BigUInt.from_bytes(R_AT_Z) >= q
+    // 		or BigUInt.from_bytes(O_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S1_AT_Z) >= q
+    // 		or BigUInt.from_bytes(S2_AT_Z) >= q
+    // 		or BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) >= q
+    bz main_after_if_else@7
+
+main_if_body@6:
+    // NexusVerifierLogicSig.py:111
+    // return False
+    err
+
+main_after_if_else@7:
+    // NexusVerifierLogicSig.py:113
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    intc_1 // 0
+    bury 20
+
+main_for_header@8:
+    // NexusVerifierLogicSig.py:113
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    dig 19
+    // NexusVerifierLogicSig.py:56-57
+    // # Read verifying key
+    // VK_NB_PUBLIC_INPUTS = UInt64(5)
+    pushint 5
+    // NexusVerifierLogicSig.py:113
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    <
+    bz main_after_for@13
+    // NexusVerifierLogicSig.py:114
+    // if BigUInt.from_bytes(public_inputs[i*32:(i+1)*32]) >= q:
+    dig 19
+    dup
+    intc_0 // 32
+    *
+    dup
+    dig 18
+    dup
+    cover 3
+    >=
+    dig 2
+    swap
+    select
+    uncover 2
+    intc_2 // 1
+    +
+    dup
+    bury 21
+    intc_0 // 32
+    *
+    dup
+    dig 3
+    >=
+    swap
+    uncover 3
+    uncover 2
+    select
+    dup
+    dig 2
+    <
+    dig 2
+    swap
+    select
+    dig 18
+    cover 2
+    substring3
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:114
+    // if BigUInt.from_bytes(public_inputs[i*32:(i+1)*32]) >= q:
+    b>=
+    bz main_after_if_else@11
+    // NexusVerifierLogicSig.py:115
+    // return False
+    err
+
+main_after_if_else@11:
+    dig 17
+    bury 20
+    b main_for_header@8
+
+main_after_for@13:
+    // NexusVerifierLogicSig.py:122-123
+    // gamma_pre = sha256(b'gamma' + VK_S1 + VK_S2 + VK_S3 + VK_QL + VK_QR
+    // 	+ VK_QM + VK_QO + VK_QK + public_inputs + L_COM + R_COM + O_COM)
+    pushbytes 0x67616d6d6109a386708e0535a2bfa279dfa524f481f1a8a404d17ccff3654d69edb16d20d301ff32472e6d462d4a0b89d79e7d63bddc35beb7f6d5b5219d99e738e62a868e0ae88851db44a0d343389019cfb797f99050c073d98d983ed79e424cb1a0b0652be21a1c7b7db475ccf301f33a6f27de74d2114368c71f28651df261bcfb81ae184057a5c36fdc360b252158f5c27b992509151b12fdcc3e90baef5136650d1e2593b573c72b9625fcfba432bbdcb02d09bafe1716265223ef500b6770d9efdf0ea48a02c9f0c4b6226edb9df922adc28446b16e07e7e3ce19dd8e4c74950a9d03f68c2ba534a960d1d3612060de6790ce9b219f5ff731be1beadb6e3cad2d63251a408e1b9afd507956027f43f967aa796dee280070de81c2e626f36a37527f2e7c82ae61774082c4ce1251ab68242f402c6d919849698ad907e7b5a7b9bff3121ce3fca38ac5eb5c766c3f2c5588fe6e8ee98f11e5c3d97f423c4fa1268e87006cf6a1427c375ff7caea8e56d4795e24967c20c46001c0bb13768bed33e1da21fe7cc2c836b79cbd14f62e47dbb13bc2dc48817633e9b1ae113d976b1983042f77b7d6023e81804a822c4c65b72d9e65124fd19232e01e7db4ee49c39384c30f42d30dcf81d89cefdd85e52c8b3e793689dd5cfedb7f62b321a3b1a1a964841912d634c721af6fb0cf5d615b85e89b50348063d65ebeaf7e1b0c56ff1954b5
+    dig 17
+    concat
+    dig 15
+    concat
+    dig 14
+    concat
+    dig 13
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:124
+    // beta_pre = sha256(b'beta' + gamma_pre)
+    pushbytes 0x62657461
+    dig 1
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:125
+    // alpha_pre = sha256(b'alpha' + beta_pre + GRAND_PRODUCT)
+    pushbytes 0x616c706861
+    dig 1
+    concat
+    dig 6
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:126
+    // zeta_pre = sha256(b'zeta' + alpha_pre + H_0 + H_1 + H_2)
+    pushbytes 0x7a657461
+    dig 1
+    concat
+    dig 15
+    concat
+    dig 14
+    concat
+    dig 13
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:350
+    // return BigUInt.from_bytes(x) % BigUInt(R_MOD)
+    uncover 3
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    bury 31
+    uncover 2
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    bury 31
+    swap
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    bury 32
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    dup
+    bury 24
+    // NexusVerifierLogicSig.py:58
+    // VK_DOMAIN_SIZE = BigUInt(16384)
+    bytec 4 // 0x4000
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:133-134
+    // # Zz is eval of Xⁿ-1 at zeta
+    // Zz = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    callsub expmod
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:133-134
+    // # Zz is eval of Xⁿ-1 at zeta
+    // Zz = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    b+
+    bytec_1 // 0x01
+    b-
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:133-134
+    // # Zz is eval of Xⁿ-1 at zeta
+    // Zz = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    b%
+    // NexusVerifierLogicSig.py:59
+    // VK_INV_DOMAIN_SIZE = BigUInt(21886906919515554563358329182406612413066885618409173013477031200480436436993)
+    pushbytes 0x30638ce1a7661b6337a964756aa75257c6bf4778d89789ab819ce60c19b04001
+    // NexusVerifierLogicSig.py:136-137
+    // # zn is Zz * 1/n
+    // zn = (Zz * VK_INV_DOMAIN_SIZE) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:136-137
+    // # zn is Zz * 1/n
+    // zn = (Zz * VK_INV_DOMAIN_SIZE) % q
+    b%
+    bury 22
+    // NexusVerifierLogicSig.py:139-140
+    // # Let's prepare to interpolate the public inputs
+    // w_ = BigUInt(1)
+    bytec_1 // 0x01
+    bury 24
+    // NexusVerifierLogicSig.py:141
+    // batch = DynamicArray[UInt256]()
+    pushbytes 0x0000
+    bury 30
+    // NexusVerifierLogicSig.py:142
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    intc_1 // 0
+    bury 20
+
+main_for_header@14:
+    // NexusVerifierLogicSig.py:142
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    dig 19
+    // NexusVerifierLogicSig.py:56-57
+    // # Read verifying key
+    // VK_NB_PUBLIC_INPUTS = UInt64(5)
+    pushint 5
+    // NexusVerifierLogicSig.py:142
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    <
+    bz main_after_for@17
+    // NexusVerifierLogicSig.py:143
+    // x = (zeta + q - w_) % q
+    dig 22
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:143
+    // x = (zeta + q - w_) % q
+    b+
+    dig 24
+    dup
+    cover 2
+    b-
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:143
+    // x = (zeta + q - w_) % q
+    b%
+    // NexusVerifierLogicSig.py:144
+    // batch.append(UInt256(x))
+    dup
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    intc_0 // 32
+    bzero
+    b|
+    dig 31
+    dup
+    intc_1 // 0
+    extract_uint16
+    // NexusVerifierLogicSig.py:144
+    // batch.append(UInt256(x))
+    intc_2 // 1
+    +
+    itob
+    extract 6 0
+    replace2 0
+    swap
+    concat
+    bury 31
+    // NexusVerifierLogicSig.py:60
+    // VK_OMEGA = BigUInt(20619701001583904760601357484951574588621083236087856586626117568842480512645)
+    bytec_3 // 0x2d965651cdd9e4811f4e51b80ddca8a8b4a93ee17420aae6adaa01c2617c6e85
+    // NexusVerifierLogicSig.py:145
+    // w_ = (w_ * VK_OMEGA) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:145
+    // w_ = (w_ * VK_OMEGA) % q
+    b%
+    bury 24
+    // NexusVerifierLogicSig.py:142
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    dig 19
+    intc_2 // 1
+    +
+    bury 20
+    b main_for_header@14
+
+main_after_for@17:
+    // NexusVerifierLogicSig.py:149
+    // prev = BigUInt(1)
+    bytec_1 // 0x01
+    bury 26
+    // NexusVerifierLogicSig.py:150
+    // temp.append(UInt256(prev))
+    intc_0 // 32
+    bzero
+    bury 32
+    pushbytes 0x00010000000000000000000000000000000000000000000000000000000000000001
+    bury 25
+    // NexusVerifierLogicSig.py:151
+    // for x256 in batch:
+    dig 29
+    intc_1 // 0
+    extract_uint16 // on error: invalid array length header
+    bury 21
+    intc_1 // 0
+    bury 19
+
+main_for_header@18:
+    // NexusVerifierLogicSig.py:151
+    // for x256 in batch:
+    dig 18
+    dig 21
+    <
+    bz main_after_for@21
+    dig 29
+    extract 2 0
+    dig 19
+    dup
+    cover 2
+    intc_0 // 32
+    *
+    intc_0 // 32
+    extract3 // on error: index access is out of bounds
+    // NexusVerifierLogicSig.py:153
+    // y = (x * prev) % q
+    dig 27
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:153
+    // y = (x * prev) % q
+    b%
+    // NexusVerifierLogicSig.py:154
+    // temp.append(UInt256(y))
+    dup
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    dup
+    dig 34
+    b|
+    dig 27
+    dup
+    intc_1 // 0
+    extract_uint16
+    // NexusVerifierLogicSig.py:154
+    // temp.append(UInt256(y))
+    intc_2 // 1
+    +
+    itob
+    extract 6 0
+    replace2 0
+    swap
+    concat
+    bury 27
+    swap
+    intc_2 // 1
+    +
+    bury 20
+    bury 26
+    b main_for_header@18
+
+main_after_for@21:
+    // NexusVerifierLogicSig.py:156
+    // inv = expmod(prev, q - BigUInt(2), q)
+    dig 25
+    bytec 5 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593efffffff
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:156
+    // inv = expmod(prev, q - BigUInt(2), q)
+    callsub expmod
+    bury 27
+    // NexusVerifierLogicSig.py:56-57
+    // # Read verifying key
+    // VK_NB_PUBLIC_INPUTS = UInt64(5)
+    pushint 5
+    // NexusVerifierLogicSig.py:157
+    // i = VK_NB_PUBLIC_INPUTS
+    bury 20
+
+main_while_top@22:
+    // NexusVerifierLogicSig.py:158
+    // while i > 0:
+    dig 19
+    bz main_after_while@24
+    // NexusVerifierLogicSig.py:159
+    // tmp = BigUInt.from_bytes(batch[i-1].bytes)
+    dig 19
+    intc_2 // 1
+    -
+    dup
+    bury 21
+    dig 30
+    dup
+    cover 2
+    extract 2 0
+    swap
+    intc_0 // 32
+    *
+    swap
+    dig 1
+    intc_0 // 32
+    extract3 // on error: index access is out of bounds
+    // NexusVerifierLogicSig.py:160
+    // cur = (inv * BigUInt.from_bytes(temp[i-1].bytes)) % q
+    dig 27
+    extract 2 0
+    dig 2
+    intc_0 // 32
+    extract3 // on error: index access is out of bounds
+    dig 30
+    dup
+    cover 3
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:160
+    // cur = (inv * BigUInt.from_bytes(temp[i-1].bytes)) % q
+    b%
+    // NexusVerifierLogicSig.py:161
+    // batch[i-1] = UInt256(cur)
+    dup
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    dig 36
+    b|
+    uncover 3
+    intc_3 // 2
+    +
+    uncover 4
+    swap
+    uncover 2
+    replace3 // on error: index access is out of bounds
+    bury 32
+    // NexusVerifierLogicSig.py:162
+    // inv = (inv * tmp) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:162
+    // inv = (inv * tmp) % q
+    b%
+    bury 27
+    b main_while_top@22
+
+main_after_while@24:
+    // NexusVerifierLogicSig.py:165-166
+    // # We can now interpolate the public inputs (PI)
+    // w_ = BigUInt(1)
+    bytec_1 // 0x01
+    bury 24
+    // NexusVerifierLogicSig.py:167
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    intc_1 // 0
+    bury 20
+
+main_for_header@25:
+    // NexusVerifierLogicSig.py:167
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    dig 19
+    // NexusVerifierLogicSig.py:56-57
+    // # Read verifying key
+    // VK_NB_PUBLIC_INPUTS = UInt64(5)
+    pushint 5
+    // NexusVerifierLogicSig.py:167
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    <
+    bz main_after_for@28
+    // NexusVerifierLogicSig.py:168
+    // batch[i] = UInt256((w_ * ((BigUInt.from_bytes(batch[i].bytes) * zn)
+    dig 29
+    dup
+    extract 2 0
+    dig 21
+    dup
+    cover 3
+    intc_0 // 32
+    *
+    swap
+    dig 1
+    intc_0 // 32
+    extract3 // on error: index access is out of bounds
+    dig 25
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:168-169
+    // batch[i] = UInt256((w_ * ((BigUInt.from_bytes(batch[i].bytes) * zn)
+    // 					% q)) % q)
+    b%
+    dig 27
+    dup
+    uncover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:168-169
+    // batch[i] = UInt256((w_ * ((BigUInt.from_bytes(batch[i].bytes) * zn)
+    // 					% q)) % q)
+    b%
+    dup
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    dig 36
+    b|
+    uncover 2
+    intc_3 // 2
+    +
+    uncover 3
+    swap
+    uncover 2
+    replace3 // on error: index access is out of bounds
+    bury 32
+    // NexusVerifierLogicSig.py:60
+    // VK_OMEGA = BigUInt(20619701001583904760601357484951574588621083236087856586626117568842480512645)
+    bytec_3 // 0x2d965651cdd9e4811f4e51b80ddca8a8b4a93ee17420aae6adaa01c2617c6e85
+    // NexusVerifierLogicSig.py:170
+    // w_ = (w_ * VK_OMEGA) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:170
+    // w_ = (w_ * VK_OMEGA) % q
+    b%
+    bury 25
+    // NexusVerifierLogicSig.py:167
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    intc_2 // 1
+    +
+    bury 20
+    b main_for_header@25
+
+main_after_for@28:
+    // NexusVerifierLogicSig.py:173
+    // PI = BigUInt(0)
+    bytec_2 // 0x
+    bury 33
+    // NexusVerifierLogicSig.py:174
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    intc_1 // 0
+    bury 20
+
+main_for_header@29:
+    // NexusVerifierLogicSig.py:174
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    dig 19
+    // NexusVerifierLogicSig.py:56-57
+    // # Read verifying key
+    // VK_NB_PUBLIC_INPUTS = UInt64(5)
+    pushint 5
+    // NexusVerifierLogicSig.py:174
+    // for i in urange(VK_NB_PUBLIC_INPUTS):
+    <
+    bz main_after_for@32
+    // NexusVerifierLogicSig.py:175
+    // tmp = (BigUInt.from_bytes(batch[i].bytes)
+    dig 29
+    extract 2 0
+    dig 20
+    dup
+    cover 2
+    intc_0 // 32
+    *
+    swap
+    dig 1
+    intc_0 // 32
+    extract3 // on error: index access is out of bounds
+    // NexusVerifierLogicSig.py:176
+    // * BigUInt.from_bytes(public_inputs[i*32:(i+1)*32])) % q
+    dig 1
+    dig 19
+    dup
+    cover 3
+    >=
+    uncover 3
+    dig 3
+    uncover 2
+    select
+    uncover 3
+    intc_2 // 1
+    +
+    dup
+    intc_0 // 32
+    *
+    dup
+    dig 5
+    >=
+    swap
+    uncover 5
+    uncover 2
+    select
+    dup
+    dig 3
+    <
+    dig 3
+    swap
+    select
+    dig 20
+    uncover 3
+    uncover 2
+    substring3
+    // NexusVerifierLogicSig.py:175-176
+    // tmp = (BigUInt.from_bytes(batch[i].bytes)
+    // 		* BigUInt.from_bytes(public_inputs[i*32:(i+1)*32])) % q
+    uncover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:175-176
+    // tmp = (BigUInt.from_bytes(batch[i].bytes)
+    // 		* BigUInt.from_bytes(public_inputs[i*32:(i+1)*32])) % q
+    b%
+    // NexusVerifierLogicSig.py:177
+    // PI = (PI + tmp) % q
+    dig 34
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:177
+    // PI = (PI + tmp) % q
+    b%
+    bury 34
+    bury 20
+    b main_for_header@29
+
+main_after_for@32:
+    // NexusVerifierLogicSig.py:179-180
+    // # compute alpha2Lagrange: alpha**2 * (z**n - 1) / (z - 1)
+    // res = (zeta + q - BigUInt(1)) % q
+    dig 22
+    dup
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:179-180
+    // # compute alpha2Lagrange: alpha**2 * (z**n - 1) / (z - 1)
+    // res = (zeta + q - BigUInt(1)) % q
+    b+
+    bytec_1 // 0x01
+    b-
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:179-180
+    // # compute alpha2Lagrange: alpha**2 * (z**n - 1) / (z - 1)
+    // res = (zeta + q - BigUInt(1)) % q
+    b%
+    // NexusVerifierLogicSig.py:181
+    // res = expmod(res, q - BigUInt(2), q)
+    bytec 5 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593efffffff
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:181
+    // res = expmod(res, q - BigUInt(2), q)
+    callsub expmod
+    // NexusVerifierLogicSig.py:182
+    // res = (res * zn) % q
+    dig 23
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:182
+    // res = (res * zn) % q
+    b%
+    // NexusVerifierLogicSig.py:183
+    // res = (res * alpha) % q
+    dig 32
+    dup
+    cover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:183
+    // res = (res * alpha) % q
+    b%
+    // NexusVerifierLogicSig.py:184
+    // res = (res * alpha) % q
+    dig 1
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:184
+    // res = (res * alpha) % q
+    b%
+    // NexusVerifierLogicSig.py:187-188
+    // # verify opening linearization polynomial
+    // s1 = (BigUInt.from_bytes(S1_AT_Z) * beta) % q
+    dig 8
+    dup
+    cover 4
+    dig 33
+    dup
+    cover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:187-188
+    // # verify opening linearization polynomial
+    // s1 = (BigUInt.from_bytes(S1_AT_Z) * beta) % q
+    b%
+    // NexusVerifierLogicSig.py:189
+    // s1 = (s1 + gamma + BigUInt.from_bytes(L_AT_Z)) % q
+    dup
+    dig 34
+    dup
+    cover 3
+    b+
+    dig 16
+    dup
+    cover 7
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:189
+    // s1 = (s1 + gamma + BigUInt.from_bytes(L_AT_Z)) % q
+    b%
+    // NexusVerifierLogicSig.py:191
+    // s2 = (BigUInt.from_bytes(S2_AT_Z) * beta) % q
+    dig 13
+    dup
+    cover 9
+    dig 4
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:191
+    // s2 = (BigUInt.from_bytes(S2_AT_Z) * beta) % q
+    b%
+    // NexusVerifierLogicSig.py:192
+    // s2 = (s2 + gamma + BigUInt.from_bytes(R_AT_Z)) % q
+    dup
+    dig 4
+    b+
+    dig 19
+    dup
+    cover 7
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:192
+    // s2 = (s2 + gamma + BigUInt.from_bytes(R_AT_Z)) % q
+    b%
+    // NexusVerifierLogicSig.py:194
+    // o = (BigUInt.from_bytes(O_AT_Z) + gamma) % q
+    dig 19
+    dup
+    cover 12
+    dig 5
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:194
+    // o = (BigUInt.from_bytes(O_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:196
+    // s1 = (s1 * s2) % q
+    uncover 3
+    uncover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:196
+    // s1 = (s1 * s2) % q
+    b%
+    // NexusVerifierLogicSig.py:197
+    // s1 = (s1 * o) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:197
+    // s1 = (s1 * o) % q
+    b%
+    // NexusVerifierLogicSig.py:198
+    // s1 = (s1 * alpha) % q
+    dig 7
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:198
+    // s1 = (s1 * alpha) % q
+    b%
+    // NexusVerifierLogicSig.py:199
+    // s1 = (s1 * BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA)) % q
+    dig 15
+    dup
+    cover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:199
+    // s1 = (s1 * BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA)) % q
+    b%
+    // NexusVerifierLogicSig.py:201
+    // s1 = (s1 + PI + q - alpha2Lagrange)  % q
+    dig 46
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:201
+    // s1 = (s1 + PI + q - alpha2Lagrange)  % q
+    b+
+    dig 7
+    b-
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:201
+    // s1 = (s1 + PI + q - alpha2Lagrange)  % q
+    b%
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:202
+    // linearized_poly_at_z = (q - s1)
+    swap
+    b-
+    // NexusVerifierLogicSig.py:206
+    // zn2 = expmod(zeta, n2, q)
+    dig 10
+    // NexusVerifierLogicSig.py:204-205
+    // # compute the folded commitment to H
+    // n2 = VK_DOMAIN_SIZE + BigUInt(2)
+    pushbytes 0x4002
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:206
+    // zn2 = expmod(zeta, n2, q)
+    callsub expmod
+    // NexusVerifierLogicSig.py:207
+    // folded_h = ec.scalar_mul(EC.BN254g1, H_2, zn2.bytes)
+    dig 24
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:208
+    // folded_h = ec.add(EC.BN254g1, folded_h, H_1)
+    dig 26
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:209
+    // folded_h = ec.scalar_mul(EC.BN254g1, folded_h, zn2.bytes)
+    swap
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:210
+    // folded_h = ec.add(EC.BN254g1, folded_h, H_0)
+    dig 26
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:211
+    // znminus1 = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    dig 11
+    // NexusVerifierLogicSig.py:58
+    // VK_DOMAIN_SIZE = BigUInt(16384)
+    bytec 4 // 0x4000
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:211
+    // znminus1 = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    callsub expmod
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:211
+    // znminus1 = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    b+
+    bytec_1 // 0x01
+    b-
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:211
+    // znminus1 = (expmod(zeta, VK_DOMAIN_SIZE, q) + q - BigUInt(1)) % q
+    b%
+    // NexusVerifierLogicSig.py:212
+    // folded_h = ec.scalar_mul(EC.BN254g1, folded_h, znminus1.bytes)
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:213
+    // folded_h = invert(folded_h)
+    callsub invert
+    // NexusVerifierLogicSig.py:215-216
+    // # compute commitment to linearization polynomial
+    // u = (BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) * beta) % q
+    dig 2
+    dig 7
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:215-216
+    // # compute commitment to linearization polynomial
+    // u = (BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA) * beta) % q
+    b%
+    // NexusVerifierLogicSig.py:218
+    // v = (v + BigUInt.from_bytes(L_AT_Z) + gamma) % q
+    uncover 5
+    dig 11
+    b+
+    dig 6
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:218
+    // v = (v + BigUInt.from_bytes(L_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:220
+    // w = (w + BigUInt.from_bytes(R_AT_Z) + gamma) % q
+    uncover 5
+    dig 8
+    b+
+    dig 6
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:220
+    // w = (w + BigUInt.from_bytes(R_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:222
+    // s1 = (u * v) % q
+    cover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:222
+    // s1 = (u * v) % q
+    b%
+    // NexusVerifierLogicSig.py:223
+    // s1 = (s1 * w) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:223
+    // s1 = (s1 * w) % q
+    b%
+    // NexusVerifierLogicSig.py:224
+    // s1 = (s1 * alpha) % q
+    dig 8
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:224
+    // s1 = (s1 * alpha) % q
+    b%
+    // NexusVerifierLogicSig.py:227
+    // betazeta = (beta * zeta) % q
+    uncover 5
+    dig 10
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:227
+    // betazeta = (beta * zeta) % q
+    b%
+    // NexusVerifierLogicSig.py:228
+    // u = (betazeta + BigUInt.from_bytes(L_AT_Z) + gamma) % q
+    dup
+    dig 10
+    b+
+    dig 6
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:228
+    // u = (betazeta + BigUInt.from_bytes(L_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:230
+    // v = (betazeta * VK_COSET_SHIFT) % q
+    dig 1
+    // NexusVerifierLogicSig.py:72
+    // VK_COSET_SHIFT = BigUInt(5)
+    pushbytes 0x05
+    // NexusVerifierLogicSig.py:230
+    // v = (betazeta * VK_COSET_SHIFT) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:230
+    // v = (betazeta * VK_COSET_SHIFT) % q
+    b%
+    // NexusVerifierLogicSig.py:231
+    // v = (v + BigUInt.from_bytes(R_AT_Z) + gamma) % q
+    dig 8
+    b+
+    dig 7
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:231
+    // v = (v + BigUInt.from_bytes(R_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:233
+    // w = (betazeta * coset_square) % q
+    uncover 2
+    // NexusVerifierLogicSig.py:226
+    // coset_square = (VK_COSET_SHIFT * VK_COSET_SHIFT) % q
+    pushbytes 0x19
+    // NexusVerifierLogicSig.py:233
+    // w = (betazeta * coset_square) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:233
+    // w = (betazeta * coset_square) % q
+    b%
+    // NexusVerifierLogicSig.py:234
+    // w = (w + BigUInt.from_bytes(O_AT_Z) + gamma) % q
+    dig 13
+    b+
+    uncover 7
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:234
+    // w = (w + BigUInt.from_bytes(O_AT_Z) + gamma) % q
+    b%
+    // NexusVerifierLogicSig.py:236
+    // s2 = (u * v) % q
+    cover 2
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:236
+    // s2 = (u * v) % q
+    b%
+    // NexusVerifierLogicSig.py:237
+    // s2 = q - ((s2 * w) % q)
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:237
+    // s2 = q - ((s2 * w) % q)
+    b%
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:237
+    // s2 = q - ((s2 * w) % q)
+    swap
+    b-
+    // NexusVerifierLogicSig.py:238
+    // s2 = (s2 * alpha + alpha2Lagrange) % q
+    uncover 7
+    b*
+    uncover 6
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:238
+    // s2 = (s2 * alpha + alpha2Lagrange) % q
+    b%
+    // NexusVerifierLogicSig.py:62
+    // VK_QL = Bytes.from_hex("0ea48a02c9f0c4b6226edb9df922adc28446b16e07e7e3ce19dd8e4c74950a9d03f68c2ba534a960d1d3612060de6790ce9b219f5ff731be1beadb6e3cad2d63")
+    pushbytes 0x0ea48a02c9f0c4b6226edb9df922adc28446b16e07e7e3ce19dd8e4c74950a9d03f68c2ba534a960d1d3612060de6790ce9b219f5ff731be1beadb6e3cad2d63
+    // NexusVerifierLogicSig.py:240
+    // lin_poly_com = ec.scalar_mul(EC.BN254g1, VK_QL, L_AT_Z)
+    dig 7
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:63
+    // VK_QR = Bytes.from_hex("251a408e1b9afd507956027f43f967aa796dee280070de81c2e626f36a37527f2e7c82ae61774082c4ce1251ab68242f402c6d919849698ad907e7b5a7b9bff3")
+    pushbytes 0x251a408e1b9afd507956027f43f967aa796dee280070de81c2e626f36a37527f2e7c82ae61774082c4ce1251ab68242f402c6d919849698ad907e7b5a7b9bff3
+    // NexusVerifierLogicSig.py:242
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_QR, R_AT_Z)
+    dig 7
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:243
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:64
+    // VK_QO = Bytes.from_hex("21fe7cc2c836b79cbd14f62e47dbb13bc2dc48817633e9b1ae113d976b1983042f77b7d6023e81804a822c4c65b72d9e65124fd19232e01e7db4ee49c39384c3")
+    pushbytes 0x21fe7cc2c836b79cbd14f62e47dbb13bc2dc48817633e9b1ae113d976b1983042f77b7d6023e81804a822c4c65b72d9e65124fd19232e01e7db4ee49c39384c3
+    // NexusVerifierLogicSig.py:245
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_QO, O_AT_Z)
+    dig 10
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:246
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:248
+    // ab = (BigUInt.from_bytes(L_AT_Z) * BigUInt.from_bytes(R_AT_Z)) % q
+    dig 7
+    dig 7
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:248
+    // ab = (BigUInt.from_bytes(L_AT_Z) * BigUInt.from_bytes(R_AT_Z)) % q
+    b%
+    // NexusVerifierLogicSig.py:65
+    // VK_QM = Bytes.from_hex("121ce3fca38ac5eb5c766c3f2c5588fe6e8ee98f11e5c3d97f423c4fa1268e87006cf6a1427c375ff7caea8e56d4795e24967c20c46001c0bb13768bed33e1da")
+    pushbytes 0x121ce3fca38ac5eb5c766c3f2c5588fe6e8ee98f11e5c3d97f423c4fa1268e87006cf6a1427c375ff7caea8e56d4795e24967c20c46001c0bb13768bed33e1da
+    // NexusVerifierLogicSig.py:249
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_QM, ab.bytes)
+    swap
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:250
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:66
+    // VK_QK = Bytes.from_hex("0f42d30dcf81d89cefdd85e52c8b3e793689dd5cfedb7f62b321a3b1a1a964841912d634c721af6fb0cf5d615b85e89b50348063d65ebeaf7e1b0c56ff1954b5")
+    pushbytes 0x0f42d30dcf81d89cefdd85e52c8b3e793689dd5cfedb7f62b321a3b1a1a964841912d634c721af6fb0cf5d615b85e89b50348063d65ebeaf7e1b0c56ff1954b5
+    // NexusVerifierLogicSig.py:251
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, VK_QK)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:70
+    // VK_S3 = Bytes.from_hex("184057a5c36fdc360b252158f5c27b992509151b12fdcc3e90baef5136650d1e2593b573c72b9625fcfba432bbdcb02d09bafe1716265223ef500b6770d9efdf")
+    pushbytes 0x184057a5c36fdc360b252158f5c27b992509151b12fdcc3e90baef5136650d1e2593b573c72b9625fcfba432bbdcb02d09bafe1716265223ef500b6770d9efdf
+    // NexusVerifierLogicSig.py:253
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_S3, s1.bytes)
+    uncover 3
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:254
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:256
+    // add_term = ec.scalar_mul(EC.BN254g1, GRAND_PRODUCT, s2.bytes)
+    dig 14
+    dup
+    cover 8
+    uncover 2
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:257
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:259
+    // lin_poly_com = ec.add(EC.BN254g1, lin_poly_com, folded_h)
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:261-262
+    // # generate challenge to fold the opening proofs
+    // linearized_poly_at_z_bytes = bzero(32) | linearized_poly_at_z.bytes
+    dig 41
+    dup
+    dig 3
+    b|
+    // NexusVerifierLogicSig.py:263
+    // r_pre = sha256(b'gamma' + UInt256(zeta).bytes + lin_poly_com
+    dig 8
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    dig 8
+    dig 2
+    b|
+    pushbytes 0x67616d6d61
+    dig 1
+    concat
+    dig 4
+    concat
+    // NexusVerifierLogicSig.py:263-264
+    // r_pre = sha256(b'gamma' + UInt256(zeta).bytes + lin_poly_com
+    // 	 + L_COM + R_COM + O_COM + VK_S1 + VK_S2 + linearized_poly_at_z_bytes
+    dig 28
+    dup
+    cover 3
+    concat
+    dig 28
+    dup
+    cover 5
+    concat
+    dig 28
+    dup
+    cover 9
+    concat
+    pushbytes 0x09a386708e0535a2bfa279dfa524f481f1a8a404d17ccff3654d69edb16d20d301ff32472e6d462d4a0b89d79e7d63bddc35beb7f6d5b5219d99e738e62a868e0ae88851db44a0d343389019cfb797f99050c073d98d983ed79e424cb1a0b0652be21a1c7b7db475ccf301f33a6f27de74d2114368c71f28651df261bcfb81ae
+    concat
+    uncover 3
+    concat
+    // NexusVerifierLogicSig.py:263-265
+    // r_pre = sha256(b'gamma' + UInt256(zeta).bytes + lin_poly_com
+    // 	 + L_COM + R_COM + O_COM + VK_S1 + VK_S2 + linearized_poly_at_z_bytes
+    // 	 + L_AT_Z + R_AT_Z + O_AT_Z + S1_AT_Z
+    dig 10
+    concat
+    dig 9
+    concat
+    dig 13
+    concat
+    dig 15
+    concat
+    // NexusVerifierLogicSig.py:263-266
+    // r_pre = sha256(b'gamma' + UInt256(zeta).bytes + lin_poly_com
+    // 	 + L_COM + R_COM + O_COM + VK_S1 + VK_S2 + linearized_poly_at_z_bytes
+    // 	 + L_AT_Z + R_AT_Z + O_AT_Z + S1_AT_Z
+    // 	 + S2_AT_Z + GRAND_PRODUCT_AT_Z_OMEGA)
+    dig 14
+    concat
+    dig 8
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:350
+    // return BigUInt.from_bytes(x) % BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    // NexusVerifierLogicSig.py:274
+    // add_term = ec.scalar_mul(EC.BN254g1, L_COM, r_acc.bytes)
+    uncover 2
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:275
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 5
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:276
+    // claims = (claims + (BigUInt.from_bytes(L_AT_Z) * r_acc)) % q
+    uncover 9
+    dig 2
+    b*
+    uncover 6
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:276
+    // claims = (claims + (BigUInt.from_bytes(L_AT_Z) * r_acc)) % q
+    b%
+    // NexusVerifierLogicSig.py:278
+    // r_acc = (r_acc * r) % q
+    dig 2
+    dig 3
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:278
+    // r_acc = (r_acc * r) % q
+    b%
+    // NexusVerifierLogicSig.py:279
+    // add_term = ec.scalar_mul(EC.BN254g1, R_COM, r_acc.bytes)
+    uncover 5
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:280
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 3
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:281
+    // claims = (claims + (BigUInt.from_bytes(R_AT_Z) * r_acc)) % q
+    uncover 8
+    dig 2
+    b*
+    uncover 3
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:281
+    // claims = (claims + (BigUInt.from_bytes(R_AT_Z) * r_acc)) % q
+    b%
+    // NexusVerifierLogicSig.py:283
+    // r_acc = (r_acc * r) % q
+    uncover 2
+    dig 3
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:283
+    // r_acc = (r_acc * r) % q
+    b%
+    // NexusVerifierLogicSig.py:284
+    // add_term = ec.scalar_mul(EC.BN254g1, O_COM, r_acc.bytes)
+    uncover 6
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:285
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 3
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:286
+    // claims = (claims + (BigUInt.from_bytes(O_AT_Z) * r_acc)) % q
+    uncover 9
+    dig 2
+    b*
+    uncover 3
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:286
+    // claims = (claims + (BigUInt.from_bytes(O_AT_Z) * r_acc)) % q
+    b%
+    // NexusVerifierLogicSig.py:288
+    // r_acc = (r_acc * r) % q
+    uncover 2
+    dig 3
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:288
+    // r_acc = (r_acc * r) % q
+    b%
+    // NexusVerifierLogicSig.py:68
+    // VK_S1 = Bytes.from_hex("09a386708e0535a2bfa279dfa524f481f1a8a404d17ccff3654d69edb16d20d301ff32472e6d462d4a0b89d79e7d63bddc35beb7f6d5b5219d99e738e62a868e")
+    pushbytes 0x09a386708e0535a2bfa279dfa524f481f1a8a404d17ccff3654d69edb16d20d301ff32472e6d462d4a0b89d79e7d63bddc35beb7f6d5b5219d99e738e62a868e
+    // NexusVerifierLogicSig.py:289
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_S1, r_acc.bytes)
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:290
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 3
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:291
+    // claims = (claims + (BigUInt.from_bytes(S1_AT_Z) * r_acc)) % q
+    uncover 10
+    dig 2
+    b*
+    uncover 3
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:291
+    // claims = (claims + (BigUInt.from_bytes(S1_AT_Z) * r_acc)) % q
+    b%
+    // NexusVerifierLogicSig.py:293
+    // r_acc = (r_acc * r) % q
+    uncover 2
+    dig 3
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:293
+    // r_acc = (r_acc * r) % q
+    b%
+    // NexusVerifierLogicSig.py:69
+    // VK_S2 = Bytes.from_hex("0ae88851db44a0d343389019cfb797f99050c073d98d983ed79e424cb1a0b0652be21a1c7b7db475ccf301f33a6f27de74d2114368c71f28651df261bcfb81ae")
+    pushbytes 0x0ae88851db44a0d343389019cfb797f99050c073d98d983ed79e424cb1a0b0652be21a1c7b7db475ccf301f33a6f27de74d2114368c71f28651df261bcfb81ae
+    // NexusVerifierLogicSig.py:294
+    // add_term = ec.scalar_mul(EC.BN254g1, VK_S2, r_acc.bytes)
+    dig 1
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:295
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 3
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:296
+    // claims = (claims + (BigUInt.from_bytes(S2_AT_Z) * r_acc)) % q
+    uncover 9
+    uncover 2
+    b*
+    uncover 2
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:296
+    // claims = (claims + (BigUInt.from_bytes(S2_AT_Z) * r_acc)) % q
+    b%
+    // NexusVerifierLogicSig.py:298-299
+    // # verify the folded proof
+    // r_pre = sha256(digest + BATCH_OPENING_AT_Z + GRAND_PRODUCT + OPENING_AT_Z_OMEGA + UInt256(zeta).bytes + UInt256(r).bytes)
+    dig 1
+    dig 10
+    dup
+    cover 3
+    concat
+    dig 8
+    concat
+    dig 10
+    dup
+    cover 2
+    concat
+    uncover 6
+    concat
+    dig 5
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    uncover 5
+    uncover 6
+    b|
+    concat
+    sha256
+    // NexusVerifierLogicSig.py:350
+    // return BigUInt.from_bytes(x) % BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    b%
+    // NexusVerifierLogicSig.py:303
+    // add_term = ec.scalar_mul(EC.BN254g1, OPENING_AT_Z_OMEGA, r.bytes)
+    dup2
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:304
+    // quotient = ec.add(EC.BN254g1, quotient, add_term)
+    dig 4
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:306
+    // add_term = ec.scalar_mul(EC.BN254g1, GRAND_PRODUCT, r.bytes)
+    uncover 7
+    dig 2
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:307
+    // digest = ec.add(EC.BN254g1, digest, add_term)
+    uncover 6
+    swap
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:309-310
+    // claims = (claims + (BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA)
+    // 		  * r)) % q
+    uncover 6
+    dig 3
+    b*
+    uncover 5
+    b+
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:309-310
+    // claims = (claims + (BigUInt.from_bytes(GRAND_PRODUCT_AT_Z_OMEGA)
+    // 		  * r)) % q
+    b%
+    // NexusVerifierLogicSig.py:311
+    // G1_SRS = UInt256(G1_SRS_X).bytes + UInt256(G1_SRS_Y).bytes
+    pushbytes 0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000002
+    // NexusVerifierLogicSig.py:312
+    // claims_com = ec.scalar_mul(EC.BN254g1, G1_SRS, claims.bytes)
+    swap
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:314
+    // digest = ec.add(EC.BN254g1, digest, invert(claims_com))
+    callsub invert
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:316
+    // points_quotient = ec.scalar_mul(EC.BN254g1, BATCH_OPENING_AT_Z, zeta.bytes)
+    uncover 4
+    dig 5
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:318
+    // zeta_omega = (zeta * VK_OMEGA) % q
+    uncover 5
+    // NexusVerifierLogicSig.py:60
+    // VK_OMEGA = BigUInt(20619701001583904760601357484951574588621083236087856586626117568842480512645)
+    bytec_3 // 0x2d965651cdd9e4811f4e51b80ddca8a8b4a93ee17420aae6adaa01c2617c6e85
+    // NexusVerifierLogicSig.py:318
+    // zeta_omega = (zeta * VK_OMEGA) % q
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:318
+    // zeta_omega = (zeta * VK_OMEGA) % q
+    b%
+    // NexusVerifierLogicSig.py:319
+    // r = (r * zeta_omega) % q
+    uncover 4
+    b*
+    // NexusVerifierLogicSig.py:40
+    // q = BigUInt(R_MOD)
+    bytec_0 // 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
+    // NexusVerifierLogicSig.py:319
+    // r = (r * zeta_omega) % q
+    b%
+    // NexusVerifierLogicSig.py:320
+    // add_term = ec.scalar_mul(EC.BN254g1, OPENING_AT_Z_OMEGA, r.bytes)
+    uncover 4
+    swap
+    ec_scalar_mul BN254g1
+    // NexusVerifierLogicSig.py:321
+    // points_quotient = ec.add(EC.BN254g1, points_quotient, add_term)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:323
+    // digest = ec.add(EC.BN254g1, digest, points_quotient)
+    ec_add BN254g1
+    // NexusVerifierLogicSig.py:324
+    // quotient = invert(quotient)
+    swap
+    callsub invert
+    // NexusVerifierLogicSig.py:331
+    // check = ec.pairing_check(EC.BN254g1, digest + quotient, g2)
+    concat
+    // NexusVerifierLogicSig.py:326-329
+    // g2 = (UInt256(G2_SRS_0_X_1).bytes + UInt256(G2_SRS_0_X_0).bytes
+    //    + UInt256(G2_SRS_0_Y_1).bytes + UInt256(G2_SRS_0_Y_0).bytes
+    //    + UInt256(G2_SRS_1_X_1).bytes + UInt256(G2_SRS_1_X_0).bytes
+    //    + UInt256(G2_SRS_1_Y_1).bytes + UInt256(G2_SRS_1_Y_0).bytes)
+    pushbytes 0x1800deef121f1e76426a00665e5c4479674322d4f75edadd46debd5cd992f6ed198e9393920d483a7260bfb731fb5d25f1aa493335a9e71297e485b7aef312c212c85ea5db8c6deb4aab71808dcb408fe3d1e7690c43d37b4ce6cc0166fa7daa090689d0585ff075ec9e99ad690c3395bc4b313370b38ef355acdadcd122975b30441fd1b5d3370482c42152a8899027716989a6996c2535bc9f7fee8aaef79e26186a2d65ee4d2f9c9a5b91f86597d35f192cd120caf7e935d8443d1938e23d054793348f12c0cf5622c340573cb277586319de359ab9389778f689786b1e481970ea81dd6992adfbc571effb03503adbbb6a857f578403c6c40e22d65b3c02
+    // NexusVerifierLogicSig.py:331
+    // check = ec.pairing_check(EC.BN254g1, digest + quotient, g2)
+    ec_pairing_check BN254g1
+    // NexusVerifierLogicSig.py:332
+    // return check
+    return
+
+
+// NexusVerifierLogicSig.expmod(base: bytes, exponent: bytes, modulus: bytes) -> bytes:
+expmod:
+    // NexusVerifierLogicSig.py:336-337
+    // @subroutine
+    // def expmod(base: BigUInt, exponent: BigUInt, modulus: BigUInt) -> BigUInt:
+    proto 3 1
+    // NexusVerifierLogicSig.py:339
+    // result = BigUInt(1)
+    bytec_1 // 0x01
+
+expmod_while_top@1:
+    // NexusVerifierLogicSig.py:340
+    // while exponent > 0:
+    frame_dig -2
+    bytec_2 // 0x
+    b>
+    bz expmod_after_while@5
+    // NexusVerifierLogicSig.py:341
+    // if exponent % 2 == 1:
+    frame_dig -2
+    pushbytes 0x02
+    b%
+    bytec_1 // 0x01
+    b==
+    bz expmod_after_if_else@4
+    // NexusVerifierLogicSig.py:342
+    // result = (result * base) % modulus
+    frame_dig 0
+    frame_dig -3
+    b*
+    frame_dig -1
+    b%
+    frame_bury 0
+
+expmod_after_if_else@4:
+    // NexusVerifierLogicSig.py:343
+    // exponent = exponent // 2
+    frame_dig -2
+    pushbytes 0x02
+    b/
+    frame_bury -2
+    // NexusVerifierLogicSig.py:344
+    // base = (base * base) % modulus
+    frame_dig -3
+    dup
+    b*
+    frame_dig -1
+    b%
+    frame_bury -3
+    b expmod_while_top@1
+
+expmod_after_while@5:
+    // NexusVerifierLogicSig.py:345
+    // return result
+    frame_dig 0
+    swap
+    retsub
+
+
+// NexusVerifierLogicSig.invert(p: bytes) -> bytes:
+invert:
+    // NexusVerifierLogicSig.py:352-353
+    // @subroutine
+    // def invert(p : Bytes) -> Bytes:
+    proto 1 1
+    // NexusVerifierLogicSig.py:355
+    // x = p[:32]
+    frame_dig -1
+    len
+    intc_0 // 32
+    dig 1
+    >=
+    intc_0 // 32
+    dig 2
+    uncover 2
+    select
+    frame_dig -1
+    intc_1 // 0
+    dig 2
+    substring3
+    cover 2
+    // NexusVerifierLogicSig.py:356
+    // y = BigUInt.from_bytes(p[32:])
+    frame_dig -1
+    swap
+    uncover 2
+    substring3
+    dup
+    // NexusVerifierLogicSig.py:357
+    // if y == BigUInt(0):
+    bytec_2 // 0x
+    b==
+    bz invert_after_if_else@2
+    // NexusVerifierLogicSig.py:358
+    // return p
+    frame_dig -1
+    frame_bury 0
+    retsub
+
+invert_after_if_else@2:
+    // NexusVerifierLogicSig.py:359
+    // neg_y = BigUInt(P_MOD) - y
+    pushbytes 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47
+    frame_dig 1
+    b-
+    // NexusVerifierLogicSig.py:360
+    // return x + UInt256(neg_y).bytes
+    dup
+    len
+    intc_0 // 32
+    <=
+    assert // overflow
+    intc_0 // 32
+    bzero
+    b|
+    frame_dig 0
+    swap
+    concat
+    frame_bury 0
+    retsub

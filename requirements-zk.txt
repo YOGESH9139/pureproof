@@ -1,0 +1,2 @@
+algorand-python==3.5.0
+puyapy==5.8.1

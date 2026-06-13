@@ -1,0 +1,5 @@
+.tools/
+.venv/
+circuits/setup/keys/
+circuits/prover/*.wasm
+circuits/prover/wasm_exec.js
