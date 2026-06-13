@@ -2,7 +2,7 @@
 import { useWallet } from '@txnlab/use-wallet-react'
 import React, { useState } from 'react'
 import ConnectWallet from './components/ConnectWallet'
-import Weather from './components/Weather'
+import KYCDemo from './components/KYCDemo'
 
 interface HomeProps {}
 
@@ -19,9 +19,9 @@ const Home: React.FC<HomeProps> = () => {
       <div className="hero-content w-full max-w-3xl flex flex-col gap-6">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-white mb-2">x402 Demo</h1>
+          <h1 className="text-5xl font-bold text-white mb-2">PureProof KYC</h1>
           <p className="text-lg text-teal-100">
-            Pay-per-API on Algorand: Connect wallet, sign payment, get data
+            Decentralized KYC on Algorand using ZK proofs and x402 payments.
           </p>
         </div>
 
@@ -49,12 +49,12 @@ const Home: React.FC<HomeProps> = () => {
           </div>
         </div>
 
-        {/* Weather Demo */}
+        {/* KYC Demo */}
         {activeAddress && (
           <div className="card bg-white shadow-lg">
             <div className="card-body">
-              <h2 className="card-title">Step 2: Request Weather Data</h2>
-              <Weather />
+              <h2 className="card-title">Step 2: Interact with PureProof KYC</h2>
+              <KYCDemo />
             </div>
           </div>
         )}
@@ -63,7 +63,7 @@ const Home: React.FC<HomeProps> = () => {
         {!activeAddress && (
           <div className="alert alert-info bg-white">
             <div>
-              <span>💡 Connect your wallet above to start the demo and pay for weather data!</span>
+              <span>💡 Connect your wallet above to start the demo and issue your KYC!</span>
             </div>
           </div>
         )}

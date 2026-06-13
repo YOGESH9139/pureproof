@@ -1,19 +1,17 @@
 /**
- * X402 Hackathon Starter Kit - Endpoints Configuration
+ * PureProof — x402 Payment Endpoint Configuration
  *
- * This file defines all payment-protected endpoints for your x402 service.
- * Modify this file to add new endpoints or change payment requirements.
+ * Defines the 3 KYC endpoints and their USDC micropayment prices.
+ * The x402 middleware enforces these before any handler runs.
  *
- * QUICK START FOR TEAMS:
- * 1. Add a new entry below with your endpoint path and payment price
- * 2. Create a handler in handlers/ directory
- * 3. Import and register it in index.ts
- * 4. Test with curl: curl http://localhost:4021/your-endpoint
+ * Pricing rationale:
+ *   /kyc/issue   — $0.01  (one-time credential issuance, highest value)
+ *   /kyc/verify  — $0.005 (DeFi platforms call this on each user login)
+ *   /kyc/modify  — $0.01  (re-verification + state change, same as issue)
  */
 
 import { ALGORAND_TESTNET_CAIP2, USDC_TESTNET_ASA_ID } from '@x402/avm';
 
-// Type definition for endpoints
 export interface EndpointConfig {
   [key: string]: {
     accepts: Array<{
@@ -27,150 +25,50 @@ export interface EndpointConfig {
   };
 }
 
-/**
- * ENDPOINT TEMPLATES - Copy and modify for your ideas!
- *
- * Modify this based on your team's MVP idea:
- */
 export function createPaymentConfig(avmAddress: string): EndpointConfig {
   return {
-    // ========== EXAMPLE ENDPOINTS - Modify these! ==========
-
-    /**
-     * EXAMPLE 1: Pay-Per-Use API
-     * Users pay for accessing premium data
-     * Idea: Real-time market data, weather, news, etc.
-     */
-    'GET /weather': {
+    // ── KYC ISSUE — Pay $0.01 USDC to issue a new KYC credential ────
+    'POST /kyc/issue': {
       accepts: [
         {
-          scheme: 'exact',
-          price: '$0.005', // Change this price
+          scheme:  'exact',
+          price:   '$0.01',
           network: ALGORAND_TESTNET_CAIP2,
-          payTo: avmAddress,
-          extra: { asset: Number(USDC_TESTNET_ASA_ID) },
+          payTo:   avmAddress,
+          extra:   { asset: Number(USDC_TESTNET_ASA_ID) },
         },
       ],
-      description: 'Weather data access - Pay $0.005 USDC',
+      description: 'Issue KYC credential — Pay $0.01 USDC',
     },
 
-    /**
-     * EXAMPLE 2: Premium Analytics
-     * Users pay for detailed analytics or reports
-     * Idea: Portfolio analytics, trading stats, DeFi analytics
-     */
-    // 'GET /analytics': {
-    //   accepts: [
-    //     {
-    //       scheme: 'exact',
-    //       price: '$0.01', // Premium pricing
-    //       network: ALGORAND_TESTNET_CAIP2,
-    //       payTo: avmAddress,
-    //       extra: { asset: USDC_TESTNET_ASA_ID },
-    //     },
-    //   ],
-    //   description: 'Advanced analytics dashboard - Pay $0.01 USDC',
-    // },
+    // ── KYC VERIFY — Pay $0.005 USDC to verify a credential ─────────
+    'GET /kyc/verify': {
+      accepts: [
+        {
+          scheme:  'exact',
+          price:   '$0.005',
+          network: ALGORAND_TESTNET_CAIP2,
+          payTo:   avmAddress,
+          extra:   { asset: Number(USDC_TESTNET_ASA_ID) },
+        },
+      ],
+      description: 'Verify KYC credential — Pay $0.005 USDC',
+    },
 
-    /**
-     * EXAMPLE 3: Creator Monetization
-     * Creators get paid when users access their content
-     * Idea: Exclusive NFT content, digital art, music, tutorials
-     */
-    // 'GET /exclusive-content/:id': {
-    //   accepts: [
-    //     {
-    //       scheme: 'exact',
-    //       price: '$0.02', // Creator's price
-    //       network: ALGORAND_TESTNET_CAIP2,
-    //       payTo: avmAddress,
-    //       extra: { asset: USDC_TESTNET_ASA_ID },
-    //     },
-    //   ],
-    //   description: 'Exclusive creator content - Pay $0.02 USDC per access',
-    // },
-
-    /**
-     * EXAMPLE 4: Token-Gated Utility
-     * Users pay to access special tools or utilities
-     * Idea: Dev tools, code analysis, AI-powered features
-     */
-    // 'POST /ai-analysis': {
-    //   accepts: [
-    //     {
-    //       scheme: 'exact',
-    //       price: '$0.001', // Micropayment
-    //       network: ALGORAND_TESTNET_CAIP2,
-    //       payTo: avmAddress,
-    //       extra: { asset: USDC_TESTNET_ASA_ID },
-    //     },
-    //   ],
-    //   description: 'AI analysis tool - Pay $0.001 USDC per request',
-    // },
-
-    /**
-     * EXAMPLE 5: Subscription Alternative
-     * Users pay small amounts instead of monthly subscriptions
-     * Idea: Database access, API quota, file storage
-     */
-    // 'GET /premium-data': {
-    //   accepts: [
-    //     {
-    //       scheme: 'exact',
-    //       price: '$0.003', // Small payment
-    //       network: ALGORAND_TESTNET_CAIP2,
-    //       payTo: avmAddress,
-    //       extra: { asset: USDC_TESTNET_ASA_ID },
-    //     },
-    //   ],
-    //   description: 'Premium data access - Pay as you go',
-    // },
+    // ── KYC MODIFY — Pay $0.01 USDC to update an existing credential ─
+    'POST /kyc/modify': {
+      accepts: [
+        {
+          scheme:  'exact',
+          price:   '$0.01',
+          network: ALGORAND_TESTNET_CAIP2,
+          payTo:   avmAddress,
+          extra:   { asset: Number(USDC_TESTNET_ASA_ID) },
+        },
+      ],
+      description: 'Modify KYC credential — Pay $0.01 USDC',
+    },
   };
 }
-
-/**
- * QUICK GUIDE: Adding a New Endpoint
- *
- * Step 1: Add config here
- * ───────────────────────
- * 'GET /my-endpoint': {
- *   accepts: [{
- *     scheme: 'exact',
- *     price: '$0.005',
- *     network: ALGORAND_TESTNET_CAIP2,
- *     payTo: avmAddress,
- *     extra: { asset: USDC_TESTNET_ASA_ID },
- *   }],
- *   description: 'Description of what users pay for',
- * },
- *
- * Step 2: Create handler in handlers/myEndpoint.ts
- * ─────────────────────────────────────────────────
- * import { Context } from 'hono';
- *
- * export function handleMyEndpoint(c: Context) {
- *   console.log('✓ Payment verified - returning data');
- *   return c.json({ data: 'your response here' });
- * }
- *
- * Step 3: Register in index.ts
- * ─────────────────────────────
- * import { handleMyEndpoint } from './handlers/myEndpoint';
- * app.get('/my-endpoint', handleMyEndpoint);
- *
- * That's it! Your endpoint is now payment-protected.
- */
-
-/**
- * PRICING EXAMPLES (Convert to USDC decimals):
- * - $0.001 = 1 microUSDC (micropayment)
- * - $0.005 = 5 microUSDC (low cost)
- * - $0.01  = 10 microUSDC (small fee)
- * - $0.05  = 50 microUSDC (premium)
- * - $0.10  = 100 microUSDC (high value)
- *
- * USDC on TestNet (ASA 10458941) has 6 decimals
- * So $0.01 USDC = 10,000 microunits
- */
 
 export default createPaymentConfig;

@@ -1,15 +1,18 @@
 /**
- * PureProof - Main Server
+ * PureProof — Main Server
  *
- * x402-powered KYC verification system for DeFi platforms.
- * Payment-protected API endpoints using the x402 protocol on Algorand TestNet.
+ * x402-powered KYC verification backend for DeFi platforms.
+ * Three payment-gated endpoints: issue, verify, modify.
  *
- * QUICK START:
- * 1. Import handlers from ./handlers/ directory
- * 2. Enable endpoints in endpoints.config.ts
- * 3. Register routes below
- * 4. Start server: npm start
- * 5. Test: curl http://localhost:4021/your-endpoint
+ * The x402 payment acts as the KYC gate:
+ *   1. Client hits /kyc/* endpoint
+ *   2. Server returns 402 Payment Required
+ *   3. Client signs USDC micropayment via Algorand wallet (Pera/Defly/etc.)
+ *   4. Facilitator verifies payment on-chain
+ *   5. Handler executes (payment verified = identity confirmed)
+ *
+ * Start: npm start
+ * Health: GET http://localhost:4021/health
  */
 
 import { config } from 'dotenv';
@@ -20,225 +23,163 @@ import { x402ResourceServer, HTTPFacilitatorClient } from '@x402/core/server';
 import { ExactAvmScheme } from '@x402/avm/exact/server';
 import { ALGORAND_TESTNET_CAIP2 } from '@x402/avm';
 
-// Import handler functions
-import { handleWeatherRequest } from './handlers/weather';
-import { handleAnalyticsRequest, handleAnalyticsReportRequest } from './handlers/analytics';
-import {
-  handleAIAnalysisRequest,
-  handleAIAnalysisBatchRequest,
-} from './handlers/ai-analysis';
-import {
-  handleCreatorContentRequest,
-  handleCreatorContentListRequest,
-  handleCreatorPublishRequest,
-  handleCreatorEarningsRequest,
-} from './handlers/creator-content';
+// KYC Handlers
+import { handleKYCIssue }  from './handlers/kyc-issue';
+import { handleKYCVerify } from './handlers/kyc-verify';
+import { handleKYCModify } from './handlers/kyc-modify';
 
-// Import endpoint configuration
+// KYC Store (for /info stats)
+
+// Endpoint payment config
 import createPaymentConfig, { EndpointConfig } from './endpoints.config';
 
-// Load environment variables
+// ════════════════════════════════════════════════════════════════════
+// BOOTSTRAP
+// ════════════════════════════════════════════════════════════════════
+
 config();
 
-// ════════════════════════════════════════════════════════════════════
-// CONFIGURATION & SETUP
-// ════════════════════════════════════════════════════════════════════
-
-const avmAddress = process.env.AVM_ADDRESS;
+const avmAddress    = process.env.AVM_ADDRESS;
 const facilitatorUrl = process.env.FACILITATOR_URL;
-const port = parseInt(process.env.PORT || '4021', 10);
+const port          = parseInt(process.env.PORT || '4021', 10);
 
-// Validate required environment
 if (!avmAddress || !facilitatorUrl) {
   console.error(
     '❌ Missing required environment variables:\n' +
-    '   - AVM_ADDRESS (your Algorand wallet receiving payments)\n' +
-    '   - FACILITATOR_URL (x402 facilitator service)'
+    '   AVM_ADDRESS   — your Algorand wallet that receives USDC payments\n' +
+    '   FACILITATOR_URL — x402 facilitator (https://facilitator.goplausible.xyz)',
   );
   process.exit(1);
 }
 
 console.log('\n' + '═'.repeat(60));
-console.log('PUREPROOF - x402 DeFi KYC SERVER');
+console.log('PUREPROOF — x402 DeFi KYC SERVER');
 console.log('═'.repeat(60));
-console.log('Configuration:');
-console.log(`  Receiver Address: ${avmAddress}`);
-console.log(`  Facilitator: ${facilitatorUrl}`);
-console.log(`  Port: ${port}`);
+console.log(`  Receiver : ${avmAddress}`);
+console.log(`  Facilitator : ${facilitatorUrl}`);
+console.log(`  Port        : ${port}`);
 console.log('═'.repeat(60) + '\n');
 
-// Initialize x402 Resource Server
-const facilitatorClient = new HTTPFacilitatorClient({ url: facilitatorUrl });
-const x402Server = new x402ResourceServer(facilitatorClient);
+// ════════════════════════════════════════════════════════════════════
+// X402 SETUP
+// ════════════════════════════════════════════════════════════════════
 
-// Register payment scheme for TestNet
-const avmServerScheme = new ExactAvmScheme();
+const facilitatorClient = new HTTPFacilitatorClient({ url: facilitatorUrl });
+const x402Server        = new x402ResourceServer(facilitatorClient);
+const avmServerScheme   = new ExactAvmScheme();
 x402Server.register(ALGORAND_TESTNET_CAIP2, avmServerScheme);
 
-// Create Hono app
+// ════════════════════════════════════════════════════════════════════
+// APP + MIDDLEWARE
+// ════════════════════════════════════════════════════════════════════
+
 const app = new Hono();
 
-// ════════════════════════════════════════════════════════════════════
-// MIDDLEWARE STACK
-// ════════════════════════════════════════════════════════════════════
-
-/**
- * CORS Middleware - MUST be first!
- *
- * Handles browser preflight requests and exposes payment headers
- * x402 requires wildcard CORS to expose Payment-Signature headers
- */
+// CORS — must be first; x402 requires wildcard header exposure
 app.use('*', async (c, next) => {
   const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE, HEAD',
-    'Access-Control-Allow-Headers': '*', // Critical for x402
-    'Access-Control-Expose-Headers': '*', // Critical for x402
-    'Access-Control-Max-Age': '86400',
+    'Access-Control-Allow-Origin':   '*',
+    'Access-Control-Allow-Methods':  'GET, POST, OPTIONS, PUT, DELETE, HEAD',
+    'Access-Control-Allow-Headers':  '*',
+    'Access-Control-Expose-Headers': '*',
+    'Access-Control-Max-Age':        '86400',
   };
-
-  // Handle OPTIONS preflight
   if (c.req.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
-
-  // Add headers to response
-  Object.entries(corsHeaders).forEach(([key, value]) => {
-    c.header(key, value);
-  });
-
+  Object.entries(corsHeaders).forEach(([k, v]) => c.header(k, v));
   await next();
 });
 
-/**
- * Logging Middleware
- *
- * Logs all requests for debugging and monitoring
- */
+// Request logger
 app.use('*', async (c, next) => {
-  const timestamp = new Date().toISOString();
-  console.log(`\n[${timestamp}] ${c.req.method.toUpperCase()} ${c.req.path}`);
-
-  // Log headers (useful for debugging)
+  const ts = new Date().toISOString();
+  console.log(`\n[${ts}] ${c.req.method} ${c.req.path}`);
   if (c.req.header('payment-signature')) {
-    console.log('  ✓ Payment-Signature header detected');
+    console.log('  ✓ Payment-Signature detected');
   }
-
   await next();
-  console.log(`  Response: ${c.res.status}`);
+  console.log(`  → ${c.res.status}`);
 });
 
-/**
- * X402 Payment Middleware
- *
- * Applies payment protection to configured endpoints
- * Intercepts requests and enforces x402 protocol
- */
+// x402 payment middleware — enforces micropayment on all configured routes
 const paymentConfig: EndpointConfig = createPaymentConfig(avmAddress);
-console.log('📋 Registered Payment-Protected Endpoints:');
-Object.entries(paymentConfig).forEach(([route, config]) => {
-  const price = config.accepts[0]?.price || 'unknown';
-  console.log(`   ${route} - ${price} USDC - ${config.description}`);
+
+console.log('📋 Payment-Protected KYC Endpoints:');
+Object.entries(paymentConfig).forEach(([route, cfg]) => {
+  const price = cfg.accepts[0]?.price || 'unknown';
+  console.log(`   ${route}  →  ${price} USDC`);
 });
 console.log();
 
 app.use(paymentMiddleware(paymentConfig as any, x402Server));
 
 // ════════════════════════════════════════════════════════════════════
-// ROUTE HANDLERS - Payment-Protected Endpoints
+// KYC ROUTES — only reached after payment verified
 // ════════════════════════════════════════════════════════════════════
 
-/**
- * These handlers are only called AFTER payment is verified
- * by the x402 middleware
- */
-
-// Example 1: Weather Data - Pay $0.005
-app.get('/weather', handleWeatherRequest);
-
-// Example 2: Analytics - Uncomment to enable
-// app.get('/analytics', handleAnalyticsRequest);
-// app.post('/analytics/report', handleAnalyticsReportRequest);
-
-// Example 3: AI Analysis - Uncomment to enable
-// app.post('/ai-analysis', handleAIAnalysisRequest);
-// app.post('/ai-analysis/batch', handleAIAnalysisBatchRequest);
-
-// Example 4: Creator Content - Uncomment to enable
-// app.get('/exclusive-content/:id', handleCreatorContentRequest);
-// app.get('/creators/:wallet/content', handleCreatorContentListRequest);
-// app.post('/creators/publish', handleCreatorPublishRequest);
-// app.get('/creators/:wallet/earnings', handleCreatorEarningsRequest);
+app.post('/kyc/issue',  handleKYCIssue);
+app.get('/kyc/verify',  handleKYCVerify);
+app.post('/kyc/modify', handleKYCModify);
 
 // ════════════════════════════════════════════════════════════════════
-// PUBLIC ENDPOINTS - No payment required
+// PUBLIC ROUTES — no payment required
 // ════════════════════════════════════════════════════════════════════
 
-/**
- * Health check - Use this to verify server is running
- * No payment required
- */
-app.get('/health', (c) => {
-  return c.json({
-    status: 'ok',
-    service: 'pureproof-server',
-    uptime: process.uptime(),
-  });
-});
+app.get('/health', (c) =>
+  c.json({
+    status:    'ok',
+    service:   'pureproof-server',
+    uptime:    process.uptime(),
+    timestamp: new Date().toISOString(),
+  }),
+);
 
-/**
- * Info endpoint - Shows configured endpoints
- * Helpful for debugging and integration
- */
-app.get('/info', (c) => {
-  return c.json({
-    service: 'pureproof-server',
-    version: '1.0.0',
-    network: 'Algorand TestNet',
-    receiver: avmAddress,
-    endpoints: Object.keys(paymentConfig),
-    documentation: 'See README.md in project root',
-  });
-});
-
-// ════════════════════════════════════════════════════════════════════
-// ERROR HANDLING
-// ════════════════════════════════════════════════════════════════════
-
-/**
- * 404 Handler
- *
- * Called when no route matches
- */
-app.notFound((c) => {
-  return c.json(
-    {
-      error: 'Endpoint not found',
-      path: c.req.path,
-      hint: 'Try GET /health or GET /info for diagnostics',
+app.get('/info', (c) =>
+  c.json({
+    service:     'pureproof-server',
+    version:     '1.0.0',
+    description: 'x402-powered KYC verification for DeFi — Aadhaar identity via ZK proofs',
+    network:     'Algorand TestNet',
+    receiver:    avmAddress,
+    endpoints: {
+      'POST /kyc/issue':  { price: '$0.01 USDC',  description: 'Issue new KYC credential' },
+      'GET /kyc/verify':  { price: '$0.005 USDC', description: 'Verify existing credential' },
+      'POST /kyc/modify': { price: '$0.01 USDC',  description: 'Update existing credential' },
     },
-    404
-  );
-});
+    stats: {
+      credentialsIssued: 'Available On-Chain',
+    },
+    facilitator: facilitatorUrl,
+    docs: 'See README.md',
+  }),
+);
+
+app.notFound((c) =>
+  c.json(
+    {
+      error:     'Endpoint not found',
+      path:      c.req.path,
+      available: ['POST /kyc/issue', 'GET /kyc/verify', 'POST /kyc/modify', 'GET /health', 'GET /info'],
+    },
+    404,
+  ),
+);
 
 // ════════════════════════════════════════════════════════════════════
-// SERVER STARTUP
+// START
 // ════════════════════════════════════════════════════════════════════
 
 serve({ fetch: app.fetch, port }, () => {
   console.log('\n✅ PureProof Server is running!\n');
   console.log('═'.repeat(60));
-  console.log('Endpoints:');
-  console.log(`  API:     http://localhost:${port}`);
-  console.log(`  Health:  http://localhost:${port}/health`);
-  console.log(`  Info:    http://localhost:${port}/info`);
+  console.log(`  API      → http://localhost:${port}`);
+  console.log(`  Health   → http://localhost:${port}/health`);
+  console.log(`  Info     → http://localhost:${port}/info`);
   console.log('═'.repeat(60));
-  console.log('\n📚 QUICK COMMANDS:\n');
-  console.log('Test health endpoint (no payment):');
-  console.log(`  curl http://localhost:${port}/health\n`);
-  console.log('Test payment endpoint (will request payment):');
-  console.log(`  curl http://localhost:${port}/weather\n`);
-  console.log('See handlers/ directory for examples');
-  console.log('See endpoints.config.ts to add new endpoints');
+  console.log('\nQuick test (returns 402 without payment — expected):');
+  console.log(`  curl http://localhost:${port}/kyc/verify?address=TEST`);
+  console.log('\nHealth check (no payment):');
+  console.log(`  curl http://localhost:${port}/health`);
   console.log('\n' + '═'.repeat(60) + '\n');
 });
