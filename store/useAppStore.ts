@@ -1,15 +1,23 @@
 import { create } from 'zustand';
 import { PeraWalletConnect } from '@perawallet/connect';
 
+export interface KYCRecord {
+  id: string;
+  documentType: string;
+  fullName: string;
+  idNumber: string;
+  verifiedAt: string;
+}
+
 interface AppState {
   walletAddress: string | null;
   kycStatus: 'UNVERIFIED' | 'PENDING' | 'VERIFIED';
-  x402Earnings: number;
+  documents: KYCRecord[];
   peraWallet: PeraWalletConnect | null;
   
   setWalletAddress: (address: string | null) => void;
   setKycStatus: (status: 'UNVERIFIED' | 'PENDING' | 'VERIFIED') => void;
-  setX402Earnings: (earnings: number) => void;
+  addDocument: (doc: KYCRecord) => void;
   
   initializePeraWallet: () => void;
   connectWallet: () => Promise<void>;
@@ -19,12 +27,12 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => ({
   walletAddress: null,
   kycStatus: 'UNVERIFIED',
-  x402Earnings: 0,
+  documents: [],
   peraWallet: null,
 
   setWalletAddress: (address) => set({ walletAddress: address }),
   setKycStatus: (status) => set({ kycStatus: status }),
-  setX402Earnings: (earnings) => set({ x402Earnings: earnings }),
+  addDocument: (doc) => set((state) => ({ documents: [doc, ...state.documents] })),
 
   initializePeraWallet: () => {
     if (typeof window !== 'undefined' && !get().peraWallet) {
