@@ -82,6 +82,7 @@ The repo now includes proof-submission commands:
 
 ```bash
 PATH="$PWD/.tools/go/bin:$PATH" go run ./cmd/zk-deploy-budget
+PATH="$PWD/.tools/go/bin:$PATH" go run ./cmd/zk-anchor
 PATH="$PWD/.tools/go/bin:$PATH" go run ./cmd/zk-verify
 PATH="$PWD/.tools/go/bin:$PATH" go run ./cmd/zk-verify-lsig
 ```
@@ -98,6 +99,8 @@ Observed result on TestNet:
 - The proof is 768 bytes, encoded as 24 `byte[32]` chunks.
 - Public inputs are 160 bytes, encoded as 5 `byte[32]` chunks.
 - Local PLONK verification succeeds before submission.
+- `cmd/zk-anchor` submits an MVP TestNet transaction containing the proof hash,
+  public inputs hash, and nullifier.
 - Stateful verifier app call fails even with 15 pooled budget app calls: `dynamic cost budget exceeded`, local program cost reached `11195`.
 - LogicSig verifier call also fails: `dynamic cost budget exceeded`, local program cost reached `19992`.
 
